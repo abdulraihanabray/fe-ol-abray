@@ -1,17 +1,13 @@
 import { useEffect, useRef } from "react";
-import { FaSearchPlus, FaSearchMinus, FaRegCircle } from "react-icons/fa";
-import { BiPolygon } from "react-icons/bi";
-import { PiLineSegmentFill } from "react-icons/pi";
-import { Draw, Modify, Snap } from "ol/interaction.js";
+import { Draw, Modify } from "ol/interaction.js";
 
 import Map from "ol/Map.js";
 import OSM from "ol/source/OSM.js";
 import TileLayer from "ol/layer/Tile.js";
 import View from "ol/View.js";
-import { ButtonMap } from "./button-map";
-import { HiOutlineLocationMarker } from "react-icons/hi";
 import VectorSource from "ol/source/Vector";
 import VectorLayer from "ol/layer/Vector";
+
 import {
   labelStyle,
   markerStyle,
@@ -19,8 +15,9 @@ import {
   segmentStyle,
   style,
   tipStyle,
-} from "../assets/constant/vector-styles";
-import { formatArea, formatLength } from "../utils/format-map";
+} from "../../../assets/constant/vector-styles";
+
+import { formatArea, formatLength } from "../utils/formatMap";
 import { LineString, Point } from "ol/geom";
 import { fromLonLat } from "ol/proj";
 import { unByKey } from "ol/Observable";
@@ -29,12 +26,7 @@ import { Stroke, Style } from "ol/style";
 import CircleStyle from "ol/style/Circle";
 import { easeOut } from "ol/easing.js";
 
-/**
- * Initializes a map component with an OpenStreetMap layer and a default view.
- *
- * @return {JSX.Element} A div element containing the map component.
- */
-const MapComponent = () => {
+export const useMap = () => {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const vectorSourceRef = useRef(null);
@@ -210,52 +202,11 @@ const MapComponent = () => {
     }
   };
 
-  return (
-    <div className="relative w-screen h-screen ">
-      <div ref={mapRef} className="w-full h-full"></div>
-      <div className="absolute right-0 top-1/2 -translate-y-1/2 gap-2">
-        <ButtonMap onClick={() => handleZoom(mapInstance, +2)}>
-          <FaSearchPlus />
-        </ButtonMap>
-        <ButtonMap onClick={() => handleZoom(mapInstance, -2)}>
-          <FaSearchMinus />
-        </ButtonMap>
-        <ButtonMap
-          onClick={() =>
-            addInteractions(
-              vectorSourceRef.current,
-              mapInstance.current,
-              "Polygon"
-            )
-          }
-        >
-          <BiPolygon />
-        </ButtonMap>
-        <ButtonMap
-          onClick={() =>
-            addInteractions(
-              vectorSourceRef.current,
-              mapInstance.current,
-              "LineString"
-            )
-          }
-        >
-          <PiLineSegmentFill />
-        </ButtonMap>
-        <ButtonMap
-          onClick={() =>
-            addInteractions(
-              vectorSourceRef.current,
-              mapInstance.current,
-              "Point"
-            )
-          }
-        >
-          <HiOutlineLocationMarker />
-        </ButtonMap>
-      </div>
-    </div>
-  );
+  return {
+    addInteractions,
+    handleZoom,
+    mapRef,
+    mapInstance,
+    vectorSourceRef,
+  };
 };
-
-export default MapComponent;

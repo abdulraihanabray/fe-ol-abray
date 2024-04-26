@@ -1,13 +1,11 @@
-import MapComponent from "./components/map-open-layers"
-
+import MapComponent from "./components/maps/components/map/MapLayout";
 
 function App() {
-
   return (
     <div className="">
-     <MapComponent />
+      <MapComponent />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
