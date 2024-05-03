@@ -1,5 +1,4 @@
-import { useEffect, useRef } from "react";
-import { Draw, Modify } from "ol/interaction.js";
+import { createContext, useEffect, useMemo, useRef } from "react";
 
 import Map from "ol/Map.js";
 import OSM from "ol/source/OSM.js";
@@ -16,17 +15,19 @@ import {
   style,
   tipStyle,
 } from "../../../assets/constant/vector-styles";
-
-import { formatArea, formatLength } from "../../draw/utils/formatMap";
-import { LineString, Point } from "ol/geom";
-import { fromLonLat } from "ol/proj";
 import { unByKey } from "ol/Observable";
 import { getVectorContext } from "ol/render";
+import { easeOut } from "ol/easing";
 import { Stroke, Style } from "ol/style";
 import CircleStyle from "ol/style/Circle";
-import { easeOut } from "ol/easing.js";
+import { LineString, Point } from "ol/geom";
+import { formatArea, formatLength } from "../../draw/utils/formatMap";
+import { fromLonLat } from "ol/proj";
+import { Draw, Modify } from "ol/interaction";
 
-export const useMap = () => {
+const MapContext = createContext();
+
+const MapContextProvider = ({ children }) => {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const vectorSourceRef = useRef(null);
@@ -72,12 +73,8 @@ export const useMap = () => {
     modifyRef.current = modify;
     tileLayer.current = tile;
 
-    source.on("addfeature", function (e) {
-      flash(e.feature);
-    });
-
     return () => {
-      map.setTarget(undefined);
+      map.setTarget(null);
     };
   }, []);
 
@@ -138,14 +135,14 @@ export const useMap = () => {
   }
 
   function addInteractions(source, map, type) {
-    map.removeInteraction(vectorRef.current);
+    map.current.removeInteraction(vectorRef.current);
     const activeTip =
       "Click to continue drawing the " +
       (type === "Polygon" ? "polygon" : "line");
     const idleTip = "Click to start measuring";
     let tip = idleTip;
     vectorRef.current = new Draw({
-      source,
+      source: source.current,
       type,
       style: function (feature) {
         return styleFunction(tipPointRef, modifyRef, feature, type, tip);
@@ -158,13 +155,17 @@ export const useMap = () => {
     vectorRef.current.on("drawend", function () {
       modifyStyle.setGeometry(tipPointRef.current);
       modifyRef.current.setActive(true);
-      map.once("pointermove", function () {
+      map.current.once("pointermove", function () {
         modifyStyle.setGeometry();
       });
       tip = idleTip;
     });
+
+    vectorRef.current.on("addfeature", function (e) {
+      flash(e.feature);
+    });
     modifyRef.current.setActive(true);
-    map.addInteraction(vectorRef.current);
+    map.current.addInteraction(vectorRef.current);
   }
 
   const flash = (feature) => {
@@ -202,11 +203,19 @@ export const useMap = () => {
     }
   };
 
-  return {
-    addInteractions,
-    handleZoom,
-    mapRef,
-    mapInstance,
-    vectorSourceRef,
-  };
+  const contextValue = useMemo(
+    () => ({
+      addInteractions,
+      handleZoom,
+      mapRef,
+      mapInstance,
+      vectorSourceRef,
+    }),
+    [addInteractions, handleZoom, mapRef, mapInstance, vectorSourceRef]
+  );
+  return (
+    <MapContext.Provider value={contextValue}>{children}</MapContext.Provider>
+  );
 };
+
+export { MapContext, MapContextProvider };

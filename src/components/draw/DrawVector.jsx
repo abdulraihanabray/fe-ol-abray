@@ -3,7 +3,7 @@ import { BiPolygon } from "react-icons/bi";
 import { PiLineSegmentFill } from "react-icons/pi";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 
-import { ButtonMap } from "../button/ButtonMap";
+import { ButtonMap } from "../maps/button/ButtonMap";
 
 const DrawVector = ({
   handleZoom,
