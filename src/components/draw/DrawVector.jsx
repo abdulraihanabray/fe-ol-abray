@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { FaSearchPlus, FaSearchMinus } from "react-icons/fa";
 import { BiPolygon } from "react-icons/bi";
 import { PiLineSegmentFill } from "react-icons/pi";
@@ -7,6 +8,7 @@ import { ButtonMap } from "../maps/button/ButtonMap";
 
 const DrawVector = ({
   handleZoom,
+  // eslint-disable-next-line react/prop-types
   mapInstance,
   addInteractions,
   vectorSourceRef,

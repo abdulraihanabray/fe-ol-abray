@@ -1,9 +1,3 @@
-import { FaSearchPlus, FaSearchMinus } from "react-icons/fa";
-import { BiPolygon } from "react-icons/bi";
-import { PiLineSegmentFill } from "react-icons/pi";
-
-import { ButtonMap } from "../button/ButtonMap";
-import { HiOutlineLocationMarker } from "react-icons/hi";
 import { useMap } from "../hooks/useMap";
 import DrawVector from "../../draw/DrawVector";
 import { useContext } from "react";

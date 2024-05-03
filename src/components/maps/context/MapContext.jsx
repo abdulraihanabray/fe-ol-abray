@@ -27,6 +27,7 @@ import { Draw, Modify } from "ol/interaction";
 
 const MapContext = createContext();
 
+// eslint-disable-next-line react/prop-types
 const MapContextProvider = ({ children }) => {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);

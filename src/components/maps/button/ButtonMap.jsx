@@ -1,3 +1,4 @@
+// eslint-disable-next-line react/prop-types
 export const ButtonMap = ({ children, onClick }) => {
   return (
     <div onClick={onClick} className="mr-3">
