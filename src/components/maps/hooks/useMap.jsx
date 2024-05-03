@@ -17,7 +17,7 @@ import {
   tipStyle,
 } from "../../../assets/constant/vector-styles";
 
-import { formatArea, formatLength } from "../../draw/utils/formatMap";
+import { formatArea, formatLength } from "../utils/formatMap";
 import { LineString, Point } from "ol/geom";
 import { fromLonLat } from "ol/proj";
 import { unByKey } from "ol/Observable";

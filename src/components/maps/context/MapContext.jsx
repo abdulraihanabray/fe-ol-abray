@@ -21,7 +21,7 @@ import { easeOut } from "ol/easing";
 import { Stroke, Style } from "ol/style";
 import CircleStyle from "ol/style/Circle";
 import { LineString, Point } from "ol/geom";
-import { formatArea, formatLength } from "../../draw/utils/formatMap";
+import { formatArea, formatLength } from "../utils/formatMap";
 import { fromLonLat } from "ol/proj";
 import { Draw, Modify } from "ol/interaction";
 
